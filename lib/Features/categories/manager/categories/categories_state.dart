@@ -72,3 +72,11 @@ final class CategoryProductFailurePagination extends CategoriesState {
   const CategoryProductFailurePagination({required this.error});
   final String error;
 }
+
+// extra states
+final class CategoriesSuccessExtra extends CategoriesState {}
+
+final class CategoriesFailureExtra extends CategoriesState {
+  const CategoriesFailureExtra({required this.error});
+  final String error;
+}

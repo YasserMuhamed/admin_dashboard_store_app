@@ -50,9 +50,9 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   void getCategoriesCount() async {
     final count = await categoriesRepo.getCategoriesCount();
     count.fold(
-      (failure) => emit(CategoriesFailure(error: failure.error)),
+      (failure) => emit(CategoriesFailureExtra(error: failure.error)),
       (count) {
-        emit(CategoriesSuccess());
+        emit(CategoriesSuccessExtra());
         categoriesCount = count;
         // print(count);
       },

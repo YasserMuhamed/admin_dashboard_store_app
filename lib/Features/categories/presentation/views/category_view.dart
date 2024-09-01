@@ -6,6 +6,7 @@ import 'package:admin_dashboard_store_app/configs/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class CategoryView extends StatefulWidget {
@@ -19,8 +20,8 @@ class _CategoryViewState extends State<CategoryView> {
   @override
   void initState() {
     BlocProvider.of<CategoriesCubit>(context).getCategoriesCount();
-    BlocProvider.of<CategoriesCubit>(context).page = 0;
     BlocProvider.of<CategoriesCubit>(context).categoriesList.clear();
+    BlocProvider.of<CategoriesCubit>(context).page = 0;
     BlocProvider.of<CategoriesCubit>(context)
         .getAllCategories(isPaginationLoading: false);
     super.initState();
@@ -69,27 +70,28 @@ class _CategoryViewState extends State<CategoryView> {
               itemCount: 21,
               itemBuilder: (context, index) => const ShimmerCategoryItem());
         } else if (state is CategoriesSuccess) {
-          return
-              //  state.categories.isEmpty
-              //     ? Center(
-              //         child: Column(
-              //           mainAxisAlignment: MainAxisAlignment.center,
-              //           children: [
-              //             SizedBox(
-              //               child: SvgPicture.asset(
-              //                 "assets/svg/noData.svg",
-              //                 height:
-              //                     MediaQuery.of(context).size.height * 0.3,
-              //               ),
-              //             ),
-              //             const Gap(15),
-              //             Text("No Categories Found",
-              //                 style: MyTextStyles.title),
-              //           ],
-              //         ),
-              //       )
-              //     :
-              _successUIWithData(context);
+          return context.read<CategoriesCubit>().categoriesList.isEmpty
+              ? Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      SvgPicture.asset(
+                        "assets/svg/noData2.svg",
+                        height: MediaQuery.sizeOf(context).height * .4,
+                      ),
+                      const Gap(10),
+                      const Text(
+                        'No Categories Found',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : _successUIWithData(context);
         } else if (state is CategoriesFailure) {
           return Center(
             child: Text(state.error),

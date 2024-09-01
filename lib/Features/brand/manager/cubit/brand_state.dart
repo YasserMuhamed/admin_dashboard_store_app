@@ -65,3 +65,11 @@ final class BrandProductFailurePagination extends BrandState {
   const BrandProductFailurePagination({required this.error});
   final String error;
 }
+
+// brand extra states
+final class BrandSuccessExtra extends BrandState {}
+
+final class BrandFailureExtra extends BrandState {
+  const BrandFailureExtra({required this.error});
+  final String error;
+}

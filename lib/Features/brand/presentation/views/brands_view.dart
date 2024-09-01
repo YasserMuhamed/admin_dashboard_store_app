@@ -7,6 +7,7 @@ import 'package:admin_dashboard_store_app/configs/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class BrandsView extends StatefulWidget {
@@ -62,62 +63,84 @@ class _BrandsViewState extends State<BrandsView> {
                 itemCount: 13,
                 itemBuilder: (context, index) => const BrandItemLoading());
           } else if (state is BrandSuccess) {
-            return NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                if (notification is ScrollUpdateNotification &&
-                    notification.metrics.pixels ==
-                        notification.metrics.maxScrollExtent) {
-                  if (context.read<BrandCubit>().brandsCount >
-                      context.read<BrandCubit>().brandsList.length) {
-                    context
-                        .read<BrandCubit>()
-                        .getAllBrands(isPaginationLoading: true);
-                  } else {}
-                }
-                return true;
-              },
-              child: GridView.builder(
-                physics: const BouncingScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 15,
-                ),
-                itemCount: context.read<BrandCubit>().brandsList.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () => GoRouter.of(context).push(
-                        AppRoutes.kBrandProductsView,
-                        extra: context.read<BrandCubit>().brandsList[index]),
-                    child: BrandItem(
-                        index: index,
-                        edit: () {
-                          GoRouter.of(context).pop();
-                          GoRouter.of(context).push(AppRoutes.kEditBrandView,
+            return context.read<BrandCubit>().brandsList.isEmpty
+                ? Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        SvgPicture.asset(
+                          "assets/svg/noData2.svg",
+                          height: MediaQuery.sizeOf(context).height * .4,
+                        ),
+                        const Gap(10),
+                        const Text(
+                          'No Brands Found',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : NotificationListener<ScrollNotification>(
+                    onNotification: (notification) {
+                      if (notification is ScrollUpdateNotification &&
+                          notification.metrics.pixels ==
+                              notification.metrics.maxScrollExtent) {
+                        if (context.read<BrandCubit>().brandsCount >
+                            context.read<BrandCubit>().brandsList.length) {
+                          context
+                              .read<BrandCubit>()
+                              .getAllBrands(isPaginationLoading: true);
+                        } else {}
+                      }
+                      return true;
+                    },
+                    child: GridView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 15,
+                        mainAxisSpacing: 15,
+                      ),
+                      itemCount: context.read<BrandCubit>().brandsList.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () => GoRouter.of(context).push(
+                              AppRoutes.kBrandProductsView,
                               extra:
-                                  context.read<BrandCubit>().brandsList[index]);
-                        },
-                        delete: () {
-                          GoRouter.of(context).pop();
-                          GoRouter.of(context).push(AppRoutes.kDeleteBrandView,
-                              extra:
-                                  context.read<BrandCubit>().brandsList[index]);
-                        }),
+                                  context.read<BrandCubit>().brandsList[index]),
+                          child: BrandItem(
+                              index: index,
+                              edit: () {
+                                GoRouter.of(context).pop();
+                                GoRouter.of(context).push(
+                                    AppRoutes.kEditBrandView,
+                                    extra: context
+                                        .read<BrandCubit>()
+                                        .brandsList[index]);
+                              },
+                              delete: () {
+                                GoRouter.of(context).pop();
+                                GoRouter.of(context).push(
+                                    AppRoutes.kDeleteBrandView,
+                                    extra: context
+                                        .read<BrandCubit>()
+                                        .brandsList[index]);
+                              }),
+                        );
+                      },
+                    ),
                   );
-                },
-              ),
-            );
           } else if (state is BrandFailure) {
             return Center(
               child: Text(state.error),
             );
           } else {
-            return Center(
-              child: SvgPicture.asset(
-                "assets/svg/noData.svg",
-                height: MediaQuery.sizeOf(context).height * 5,
-              ),
-            );
+            return const SizedBox.shrink();
           }
         },
       ),

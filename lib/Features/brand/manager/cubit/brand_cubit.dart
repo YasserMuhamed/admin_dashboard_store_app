@@ -46,10 +46,10 @@ class BrandCubit extends Cubit<BrandState> {
   void getBrandsCount() async {
     final count = await brandRepo.getBrandsCount();
     count.fold((l) {
-      emit(BrandFailure(error: l.error));
+      emit(BrandFailureExtra(error: l.error));
     }, (r) {
       brandsCount = r;
-      emit(BrandSuccess());
+      emit(BrandSuccessExtra());
     });
   }
 
@@ -125,8 +125,7 @@ class BrandCubit extends Cubit<BrandState> {
     } else {
       emit(BrandProductLoading());
     }
-    final products =
-        await brandRepo.getBrandProducts(id, brandProductsPageNum);
+    final products = await brandRepo.getBrandProducts(id, brandProductsPageNum);
     products.fold(
       (l) {
         if (isPaginationLoading) {
