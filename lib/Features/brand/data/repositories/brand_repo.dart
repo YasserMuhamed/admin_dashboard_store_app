@@ -1,11 +1,13 @@
 import 'package:admin_dashboard_store_app/Core/error/failures.dart';
 import 'package:admin_dashboard_store_app/Features/brand/data/models/all_brands.dart';
 import 'package:admin_dashboard_store_app/Features/brand/data/models/brand_model/brand_model.dart';
+import 'package:admin_dashboard_store_app/Features/dashboard/data/models/product_model.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class BrandRepo {
   // Get brand's Products by id
-  Future<Either<Failures, BrandModel>> getBrandProducts(int id);
+  Future<Either<Failures, List<ProductModel>>> getBrandProducts(
+      int id, int page);
 
   // Get all brands
   Future<Either<Failures, List<BrandModel>>> getAllBrand(int page);

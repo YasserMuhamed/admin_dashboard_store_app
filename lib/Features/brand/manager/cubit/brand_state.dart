@@ -46,3 +46,22 @@ class BrandFailurePagination extends BrandState {
   final String error;
   const BrandFailurePagination({required this.error});
 }
+
+// ************* Brand products States *************
+
+final class BrandProductLoading extends BrandState {}
+
+final class BrandProductSuccess extends BrandState {}
+
+final class BrandProductFailure extends BrandState {
+  const BrandProductFailure({required this.error});
+  final String error;
+}
+
+// pagination states for products
+final class BrandProductLoadingPagination extends BrandState {}
+
+final class BrandProductFailurePagination extends BrandState {
+  const BrandProductFailurePagination({required this.error});
+  final String error;
+}

@@ -85,20 +85,25 @@ class _BrandsViewState extends State<BrandsView> {
                 ),
                 itemCount: context.read<BrandCubit>().brandsList.length,
                 itemBuilder: (context, index) {
-                  return BrandItem(
-                      index: index,
-                      edit: () {
-                        GoRouter.of(context).pop();
-                        GoRouter.of(context).push(AppRoutes.kEditBrandView,
-                            extra:
-                                context.read<BrandCubit>().brandsList[index]);
-                      },
-                      delete: () {
-                        GoRouter.of(context).pop();
-                        GoRouter.of(context).push(AppRoutes.kDeleteBrandView,
-                            extra:
-                                context.read<BrandCubit>().brandsList[index]);
-                      });
+                  return GestureDetector(
+                    onTap: () => GoRouter.of(context).push(
+                        AppRoutes.kBrandProductsView,
+                        extra: context.read<BrandCubit>().brandsList[index]),
+                    child: BrandItem(
+                        index: index,
+                        edit: () {
+                          GoRouter.of(context).pop();
+                          GoRouter.of(context).push(AppRoutes.kEditBrandView,
+                              extra:
+                                  context.read<BrandCubit>().brandsList[index]);
+                        },
+                        delete: () {
+                          GoRouter.of(context).pop();
+                          GoRouter.of(context).push(AppRoutes.kDeleteBrandView,
+                              extra:
+                                  context.read<BrandCubit>().brandsList[index]);
+                        }),
+                  );
                 },
               ),
             );

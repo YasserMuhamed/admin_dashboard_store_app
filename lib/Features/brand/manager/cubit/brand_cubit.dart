@@ -1,6 +1,7 @@
 import 'package:admin_dashboard_store_app/Features/brand/data/models/all_brands.dart';
 import 'package:admin_dashboard_store_app/Features/brand/data/models/brand_model/brand_model.dart';
 import 'package:admin_dashboard_store_app/Features/brand/data/repositories/brand_repo.dart';
+import 'package:admin_dashboard_store_app/Features/dashboard/data/models/product_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -12,9 +13,11 @@ class BrandCubit extends Cubit<BrandState> {
 
   // Cubit Main Variables
   int page = 0;
+  int brandProductsPageNum = 0;
   int brandsCount = 0;
   List<BrandModel> brandsList = [];
   List<AllBrands> brandsNames = [];
+  List<ProductModel> brandProductsList = [];
 
   // Get all brands cubit function
   void getAllBrands({bool isPaginationLoading = false}) async {
@@ -112,5 +115,34 @@ class BrandCubit extends Cubit<BrandState> {
         brandsNames = r;
       }
     });
+  }
+
+  // Get Brand products cubit function
+  void getBrandProducts(
+      {required int id, bool isPaginationLoading = false}) async {
+    if (isPaginationLoading) {
+      emit(BrandProductLoadingPagination());
+    } else {
+      emit(BrandProductLoading());
+    }
+    final products =
+        await brandRepo.getBrandProducts(id, brandProductsPageNum);
+    products.fold(
+      (l) {
+        if (isPaginationLoading) {
+          emit(BrandProductFailurePagination(error: l.error));
+        } else {
+          emit(BrandProductFailure(error: l.error));
+        }
+      },
+      (r) {
+        if (r.isNotEmpty) {
+          brandProductsPageNum++;
+          brandProductsList.addAll(r);
+        }
+
+        emit(BrandProductSuccess());
+      },
+    );
   }
 }

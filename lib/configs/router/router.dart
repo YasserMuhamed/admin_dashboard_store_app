@@ -2,16 +2,17 @@ import 'package:admin_dashboard_store_app/Core/constants/constant.dart';
 import 'package:admin_dashboard_store_app/Features/auth/presentation/views/login_view.dart';
 import 'package:admin_dashboard_store_app/Features/auth/presentation/views/register_view.dart';
 import 'package:admin_dashboard_store_app/Features/brand/data/models/brand_model/brand_model.dart';
+import 'package:admin_dashboard_store_app/Features/brand/presentation/views/brand_products_view.dart';
 import 'package:admin_dashboard_store_app/Features/brand/presentation/views/create_brands_view.dart';
 import 'package:admin_dashboard_store_app/Features/brand/presentation/views/delete_brands_view.dart';
 import 'package:admin_dashboard_store_app/Features/brand/presentation/views/edit_brands_view.dart';
 import 'package:admin_dashboard_store_app/Features/brand/presentation/views/brands_view.dart';
 import 'package:admin_dashboard_store_app/Features/categories/data/models/category_model/category_model.dart';
-import 'package:admin_dashboard_store_app/Features/categories/presentation/pages/category_products_view.dart';
-import 'package:admin_dashboard_store_app/Features/categories/presentation/pages/category_view.dart';
-import 'package:admin_dashboard_store_app/Features/categories/presentation/pages/create_category_view.dart';
-import 'package:admin_dashboard_store_app/Features/categories/presentation/pages/delete_category_view.dart';
-import 'package:admin_dashboard_store_app/Features/categories/presentation/pages/edit_category_view.dart';
+import 'package:admin_dashboard_store_app/Features/categories/presentation/views/category_products_view.dart';
+import 'package:admin_dashboard_store_app/Features/categories/presentation/views/category_view.dart';
+import 'package:admin_dashboard_store_app/Features/categories/presentation/views/create_category_view.dart';
+import 'package:admin_dashboard_store_app/Features/categories/presentation/views/delete_category_view.dart';
+import 'package:admin_dashboard_store_app/Features/categories/presentation/views/edit_category_view.dart';
 import 'package:admin_dashboard_store_app/Features/dashboard/data/models/product_model.dart';
 import 'package:admin_dashboard_store_app/Features/dashboard/presentation/pages/create_product_view.dart';
 import 'package:admin_dashboard_store_app/Features/dashboard/presentation/pages/dashboard_view.dart';
@@ -98,6 +99,12 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.kBrandView,
         builder: (context, state) => const BrandsView(),
+      ),
+      GoRoute(
+        path: AppRoutes.kBrandProductsView,
+        builder: (context, state) => BrandProductsView(
+          brandModel: state.extra as BrandModel,
+        ),
       ),
       GoRoute(
         path: AppRoutes.kEditBrandView,

@@ -3,6 +3,7 @@ import 'package:admin_dashboard_store_app/Core/error/failures.dart';
 import 'package:admin_dashboard_store_app/Features/brand/data/models/all_brands.dart';
 import 'package:admin_dashboard_store_app/Features/brand/data/models/brand_model/brand_model.dart';
 import 'package:admin_dashboard_store_app/Features/brand/data/repositories/brand_repo.dart';
+import 'package:admin_dashboard_store_app/Features/dashboard/data/models/product_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
@@ -36,9 +37,22 @@ class BrandRepoImpl implements BrandRepo {
 
   //****************** Get Brand Implementation ******************
   @override
-  Future<Either<Failures, BrandModel>> getBrandProducts(int id) {
-    // TODO: implement getBrand
-    throw UnimplementedError();
+  Future<Either<Failures, List<ProductModel>>> getBrandProducts(
+      int id, int page) async {
+    try {
+      Response response = await apiManager.get(
+          endPoint: '/brands/$id/products?limit=10&page=$page');
+
+      final brandProducts = (response.data['data'] as List)
+          .map((e) => ProductModel.fromJson(e))
+          .toList();
+      return Right(brandProducts);
+    } on Exception catch (e) {
+      if (e is DioException) {
+        return Left(ServerFailure.fromDioException(e));
+      }
+      return Left(ServerFailure(error: e.toString()));
+    }
   }
 
   //****************** Get Brands Count Implementation ******************
